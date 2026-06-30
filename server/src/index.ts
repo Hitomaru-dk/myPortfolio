@@ -31,6 +31,11 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-app.listen(PORT, () => {
-  console.log(`[server] running on http://localhost:${PORT}`);
-});
+// เฉพาะการรันในเครื่อง (Local Development) ให้เปิด port ฟังปกติ
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`[server] running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
