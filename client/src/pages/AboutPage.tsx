@@ -17,6 +17,7 @@ import SectionHeading from '../components/SectionHeading';
 import TechTag from '../components/TechTag';
 import Button from '../components/Button';
 import { GithubIcon, InstagramIcon, FacebookIcon } from '../components/BrandIcons';
+import { useScrollReveal, useStaggerReveal } from '../hooks/useScrollReveal';
 import type { Profile, ProfileFormData } from '../types';
 
 export default function AboutPage() {
@@ -43,6 +44,17 @@ export default function AboutPage() {
     tools: '',
     certifications: '',
   });
+
+  // Scroll-reveal hooks for each section
+  const [headerRef, headerVisible] = useScrollReveal();
+  const [photoRef, photoVisible] = useScrollReveal<HTMLDivElement>({ threshold: 0.2 });
+  const [contactRef, contactVisible] = useScrollReveal({ delay: 100 });
+  const [socialsRef, socialsVisible] = useScrollReveal({ delay: 150 });
+  const [aboutMeRef, aboutMeVisible] = useScrollReveal();
+  const [skillsRef, skillsVisible] = useScrollReveal();
+  const [toolsRef, toolsVisible] = useScrollReveal();
+  const [langsRef, langsVisible] = useScrollReveal();
+  const [certsRef, certsVisible] = useScrollReveal();
 
   const fetchProfile = async () => {
     try {
@@ -166,10 +178,18 @@ export default function AboutPage() {
     certifications: [],
   };
 
+  // Stagger reveals for skills, tools, and certs
+  const skillsStagger = useStaggerReveal(activeProfile.skills.length, 50);
+  const toolsStagger = useStaggerReveal(activeProfile.tools.length, 50);
+  const certsStagger = useStaggerReveal(activeProfile.certifications.length, 80);
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-16 md:py-24">
       {/* Page Header + Admin edit button */}
-      <div className="flex items-start justify-between mb-12 animate-fade-in-up">
+      <div
+        ref={headerRef}
+        className={`flex items-start justify-between mb-12 reveal ${headerVisible ? 'visible' : ''}`}
+      >
         <div>
           <h1 className="font-display font-bold text-3xl md:text-4xl text-text tracking-wide uppercase">
             {t('about.title')}
@@ -302,12 +322,15 @@ export default function AboutPage() {
           </div>
         </form>
       ) : (
-        /* ===== หน้าแสดงผลปกติ (Read Mode) ===== */
-        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-10 lg:gap-14 animate-fade-in-up">
+        /* ===== หน้าแสดงผลปกติ (Read Mode) with scroll-reveal ===== */
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-10 lg:gap-14">
           {/* ===== Left Column ===== */}
           <aside>
             {/* Profile photo frame */}
-            <div className="target-bracket-full mb-6 p-1">
+            <div
+              ref={photoRef}
+              className={`target-bracket-full mb-6 p-1 reveal-scale ${photoVisible ? 'visible' : ''}`}
+            >
               <div className="bg-surface aspect-square flex items-center justify-center overflow-hidden">
                 {activeProfile.avatarUrl ? (
                   <img
@@ -326,39 +349,43 @@ export default function AboutPage() {
             </div>
 
             {/* Name + role */}
-            <h2 className="font-display font-bold text-2xl text-text mb-1">
+            <h2 className={`font-display font-bold text-2xl text-text mb-1 reveal ${photoVisible ? 'visible' : ''}`}>
               {t('home.name')}
             </h2>
-            <p className="font-mono text-xs text-accent-blue tracking-wider uppercase mb-6">
+            <p className={`font-mono text-xs text-accent-blue tracking-wider uppercase mb-6 reveal ${photoVisible ? 'visible' : ''}`}>
               {t('about.role')}
             </p>
 
             {/* Contact info */}
-            <SectionHeading title={t('about.contact')} />
-            <div className="space-y-3 mb-8">
-              <ContactRow icon={Mail} label={t('about.email')} value={activeProfile.email} />
-              <ContactRow icon={Phone} label={t('about.phone')} value={activeProfile.phone} />
-              <ContactRow
-                icon={Cake}
-                label={t('about.birthday')}
-                value={currentLang === 'th' ? activeProfile.birthdayTh : activeProfile.birthdayEn}
-              />
+            <div ref={contactRef} className={`reveal ${contactVisible ? 'visible' : ''}`}>
+              <SectionHeading title={t('about.contact')} />
+              <div className="space-y-3 mb-8">
+                <ContactRow icon={Mail} label={t('about.email')} value={activeProfile.email} />
+                <ContactRow icon={Phone} label={t('about.phone')} value={activeProfile.phone} />
+                <ContactRow
+                  icon={Cake}
+                  label={t('about.birthday')}
+                  value={currentLang === 'th' ? activeProfile.birthdayTh : activeProfile.birthdayEn}
+                />
+              </div>
             </div>
 
             {/* Socials */}
-            <SectionHeading title={t('about.socials')} />
-            <div className="space-y-2.5">
-              <SocialRow name="GitHub" handle="GitHub Profile" url={activeProfile.githubUrl} icon={GithubIcon} />
-              <SocialRow name="Line" handle="Line ID / Link" url={activeProfile.lineUrl} icon={MessageCircle} />
-              <SocialRow name="Instagram" handle="Instagram" url={activeProfile.instagramUrl} icon={InstagramIcon} />
-              <SocialRow name="Facebook" handle="Facebook" url={activeProfile.facebookUrl} icon={FacebookIcon} />
+            <div ref={socialsRef} className={`reveal ${socialsVisible ? 'visible' : ''}`}>
+              <SectionHeading title={t('about.socials')} />
+              <div className="space-y-2.5">
+                <SocialRow name="GitHub" handle="GitHub Profile" url={activeProfile.githubUrl} icon={GithubIcon} />
+                <SocialRow name="Line" handle="Line ID / Link" url={activeProfile.lineUrl} icon={MessageCircle} />
+                <SocialRow name="Instagram" handle="Instagram" url={activeProfile.instagramUrl} icon={InstagramIcon} />
+                <SocialRow name="Facebook" handle="Facebook" url={activeProfile.facebookUrl} icon={FacebookIcon} />
+              </div>
             </div>
           </aside>
 
           {/* ===== Right Column ===== */}
           <div className="space-y-10">
             {/* About Me */}
-            <section>
+            <section ref={aboutMeRef} className={`reveal ${aboutMeVisible ? 'visible' : ''}`}>
               <SectionHeading title={t('about.aboutMe')} />
               <p className="font-body text-base text-text-muted leading-relaxed whitespace-pre-line">
                 {currentLang === 'th' ? activeProfile.aboutTextTh : activeProfile.aboutTextEn}
@@ -366,40 +393,55 @@ export default function AboutPage() {
             </section>
 
             {/* Technical Skills */}
-            <section>
+            <section ref={skillsRef} className={`reveal ${skillsVisible ? 'visible' : ''}`}>
               <SectionHeading title={t('about.skills')} />
-              <div className="flex flex-wrap gap-2">
-                {activeProfile.skills.map((skill) => (
-                  <TechTag key={skill} label={skill} />
+              <div ref={skillsStagger.containerRef} className="flex flex-wrap gap-2">
+                {activeProfile.skills.map((skill, i) => (
+                  <span
+                    key={skill}
+                    className={`reveal-item ${skillsStagger.visibleItems[i] ? 'visible' : ''}`}
+                  >
+                    <TechTag label={skill} />
+                  </span>
                 ))}
               </div>
             </section>
 
             {/* Tools & Software */}
-            <section>
+            <section ref={toolsRef} className={`reveal ${toolsVisible ? 'visible' : ''}`}>
               <SectionHeading title={t('about.tools')} />
-              <div className="flex flex-wrap gap-2">
-                {activeProfile.tools.map((tool) => (
-                  <TechTag key={tool} label={tool} />
+              <div ref={toolsStagger.containerRef} className="flex flex-wrap gap-2">
+                {activeProfile.tools.map((tool, i) => (
+                  <span
+                    key={tool}
+                    className={`reveal-item ${toolsStagger.visibleItems[i] ? 'visible' : ''}`}
+                  >
+                    <TechTag label={tool} />
+                  </span>
                 ))}
               </div>
             </section>
 
             {/* Languages */}
-            <section>
+            <section ref={langsRef} className={`reveal ${langsVisible ? 'visible' : ''}`}>
               <SectionHeading title={t('about.languages')} />
               <div className="space-y-3">
-                <LanguageBar name={t('about.langThai')} level={t('about.langThaiLevel')} percent={100} />
-                <LanguageBar name={t('about.langEnglish')} level={t('about.langEnglishLevel')} percent={55} />
+                <LanguageBar name={t('about.langThai')} level={t('about.langThaiLevel')} percent={100} animate={langsVisible} />
+                <LanguageBar name={t('about.langEnglish')} level={t('about.langEnglishLevel')} percent={55} animate={langsVisible} />
               </div>
             </section>
 
             {/* Certifications */}
-            <section>
+            <section ref={certsRef} className={`reveal ${certsVisible ? 'visible' : ''}`}>
               <SectionHeading title={t('about.certifications')} />
-              <div className="space-y-3">
-                {activeProfile.certifications.map((cert) => (
-                  <div key={cert.name} className="bg-surface border border-hairline p-4 flex items-start justify-between">
+              <div ref={certsStagger.containerRef} className="space-y-3">
+                {activeProfile.certifications.map((cert, i) => (
+                  <div
+                    key={cert.name}
+                    className={`bg-surface border border-hairline p-4 flex items-start justify-between cert-card reveal-item ${
+                      certsStagger.visibleItems[i] ? 'visible' : ''
+                    }`}
+                  >
                     <div>
                       <p className="font-display text-sm text-text font-medium">{cert.name}</p>
                       <p className="font-mono text-xs text-text-muted mt-1">{cert.issuer}</p>
@@ -428,8 +470,8 @@ function ContactRow({
   value: string;
 }) {
   return (
-    <div className="flex items-center gap-3">
-      <Icon size={14} className="text-accent-blue shrink-0" />
+    <div className="flex items-center gap-3 group">
+      <Icon size={14} className="text-accent-blue shrink-0 transition-transform duration-200 group-hover:scale-110" />
       <div className="flex flex-col">
         <span className="font-mono text-[10px] text-text-muted uppercase tracking-wider">
           {label}
@@ -459,10 +501,12 @@ function SocialRow({
       rel="noopener noreferrer"
       className="flex items-center gap-3 text-text-muted hover:text-accent-blue transition-colors group"
     >
-      <Icon style={{ width: 16, height: 16 }} />
+      <span className="social-bounce inline-flex">
+        <Icon style={{ width: 16, height: 16 }} />
+      </span>
       <span className="font-body text-sm">{name}</span>
       <span className="font-mono text-xs text-text-muted/60">{handle}</span>
-      <ExternalLink size={12} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+      <ExternalLink size={12} className="ml-auto opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:translate-x-0 -translate-x-2" />
     </a>
   );
 }
@@ -471,10 +515,12 @@ function LanguageBar({
   name,
   level,
   percent,
+  animate,
 }: {
   name: string;
   level: string;
   percent: number;
+  animate: boolean;
 }) {
   return (
     <div>
@@ -483,7 +529,10 @@ function LanguageBar({
         <span className="font-mono text-xs text-text-muted">{level}</span>
       </div>
       <div className="h-1.5 bg-surface border border-hairline overflow-hidden">
-        <div className="h-full bg-accent-blue transition-all duration-500" style={{ width: `${percent}%` }} />
+        <div
+          className={`h-full bg-accent-blue lang-bar-fill ${animate ? 'visible' : ''}`}
+          style={{ width: `${percent}%` }}
+        />
       </div>
     </div>
   );

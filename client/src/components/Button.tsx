@@ -12,7 +12,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const base =
-    'inline-flex items-center justify-center gap-2 font-display font-semibold text-sm px-5 py-2.5 transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed tracking-wide uppercase';
+    'inline-flex items-center justify-center gap-2 font-display font-semibold text-sm px-5 py-2.5 transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed tracking-wide uppercase btn-ripple';
 
   const variants: Record<string, string> = {
     primary:

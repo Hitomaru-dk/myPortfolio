@@ -11,7 +11,7 @@ export default function TechTag({ label, variant = 'default' }: TechTagProps) {
 
   return (
     <span
-      className={`inline-block font-mono text-xs px-2.5 py-1 border ${colors} bg-surface/60 tracking-wide uppercase`}
+      className={`inline-block font-mono text-xs px-2.5 py-1 border ${colors} bg-surface/60 tracking-wide uppercase tech-tag-interactive`}
     >
       {label}
     </span>

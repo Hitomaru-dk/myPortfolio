@@ -5,6 +5,7 @@ import { Plus, Trash2, Upload, Edit2 } from 'lucide-react';
 import axios from 'axios';
 import type { Project, ProjectFormData } from '../types';
 import { useAuth } from '../contexts/AuthContext';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 import Button from '../components/Button';
 import TechTag from '../components/TechTag';
 import SectionHeading from '../components/SectionHeading';
@@ -19,6 +20,8 @@ export default function ProjectsPage() {
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+
+  const [headerRef, headerVisible] = useScrollReveal();
 
   const fetchProjects = async () => {
     try {
@@ -86,7 +89,10 @@ export default function ProjectsPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-16 md:py-24">
       {/* Page header */}
-      <div className="flex items-start justify-between mb-12 animate-fade-in-up">
+      <div
+        ref={headerRef}
+        className={`flex items-start justify-between mb-12 reveal ${headerVisible ? 'visible' : ''}`}
+      >
         <div>
           <h1 className="font-display font-bold text-3xl md:text-4xl text-text tracking-wide uppercase">
             {t('projects.title')}
@@ -192,10 +198,14 @@ function ProjectCard({
   onDelete: (id: string) => void;
   index: number;
 }) {
+  const [ref, isVisible] = useScrollReveal<HTMLDivElement>({ delay: index * 80, threshold: 0.05 });
+
   return (
     <div
-      className="target-bracket-full group bg-surface border border-hairline overflow-hidden transition-all duration-300 hover:border-accent-blue/30 animate-fade-in-up"
-      style={{ animationDelay: `${index * 0.05}s` }}
+      ref={ref}
+      className={`target-bracket-full group bg-surface border border-hairline overflow-hidden card-interactive hover:border-accent-blue/30 reveal ${
+        isVisible ? 'visible' : ''
+      }`}
     >
       {/* Thumbnail */}
       <Link to={`/projects/${project.id}`} className="block">

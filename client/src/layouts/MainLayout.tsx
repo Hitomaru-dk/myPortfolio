@@ -70,52 +70,75 @@ export default function MainLayout() {
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              <div className="relative w-[22px] h-[22px]">
+                <X
+                  size={22}
+                  className={`absolute inset-0 transition-all duration-300 ${
+                    mobileOpen ? 'opacity-100 rotate-0' : 'opacity-0 rotate-90'
+                  }`}
+                />
+                <Menu
+                  size={22}
+                  className={`absolute inset-0 transition-all duration-300 ${
+                    mobileOpen ? 'opacity-0 -rotate-90' : 'opacity-100 rotate-0'
+                  }`}
+                />
+              </div>
             </button>
           </div>
         </div>
 
-        {/* Mobile nav drawer */}
-        {mobileOpen && (
-          <nav
-            className="md:hidden bg-surface border-t border-hairline animate-fade-in-up"
-            aria-label="Mobile navigation"
-          >
-            <div className="px-4 py-4 flex flex-col gap-1">
-              {navLinks.map((link) => {
-                const isActive = location.pathname === link.path;
-                return (
-                  <NavLink
-                    key={link.key}
-                    to={link.path}
-                    onClick={() => setMobileOpen(false)}
-                    className={`font-display text-sm tracking-wider uppercase px-3 py-2.5 transition-colors ${
-                      isActive ? 'text-accent-blue' : 'text-text-muted hover:text-text'
-                    }`}
-                  >
-                    {t(`nav.${link.key}`)}
-                  </NavLink>
-                );
-              })}
-              {isAdmin && (
-                <button
-                  onClick={() => {
-                    logout();
-                    setMobileOpen(false);
+        {/* Mobile nav drawer — CSS transition instead of conditional render */}
+        <nav
+          className={`md:hidden bg-surface border-t border-hairline mobile-nav ${
+            mobileOpen ? 'open' : ''
+          }`}
+          aria-label="Mobile navigation"
+          aria-hidden={!mobileOpen}
+        >
+          <div className="px-4 py-4 flex flex-col gap-1">
+            {navLinks.map((link, i) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <NavLink
+                  key={link.key}
+                  to={link.path}
+                  onClick={() => setMobileOpen(false)}
+                  className={`font-display text-sm tracking-wider uppercase px-3 py-2.5 transition-all duration-300 ${
+                    isActive ? 'text-accent-blue' : 'text-text-muted hover:text-text'
+                  }`}
+                  style={{
+                    transitionDelay: mobileOpen ? `${i * 60}ms` : '0ms',
+                    opacity: mobileOpen ? 1 : 0,
+                    transform: mobileOpen ? 'translateX(0)' : 'translateX(-12px)',
                   }}
-                  className="text-left font-mono text-xs text-accent-red/70 hover:text-accent-red transition-colors px-3 py-2.5 cursor-pointer uppercase tracking-wider"
+                  tabIndex={mobileOpen ? 0 : -1}
                 >
-                  {t('login.logout')}
-                </button>
-              )}
-            </div>
-          </nav>
-        )}
+                  {t(`nav.${link.key}`)}
+                </NavLink>
+              );
+            })}
+            {isAdmin && (
+              <button
+                onClick={() => {
+                  logout();
+                  setMobileOpen(false);
+                }}
+                className="text-left font-mono text-xs text-accent-red/70 hover:text-accent-red transition-colors px-3 py-2.5 cursor-pointer uppercase tracking-wider"
+                tabIndex={mobileOpen ? 0 : -1}
+              >
+                {t('login.logout')}
+              </button>
+            )}
+          </div>
+        </nav>
       </header>
 
       {/* ===== Main content ===== */}
       <main className="flex-1">
-        <Outlet />
+        <div className="page-enter" key={location.pathname}>
+          <Outlet />
+        </div>
       </main>
 
       {/* ===== Footer ===== */}
@@ -130,7 +153,7 @@ export default function MainLayout() {
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-muted hover:text-accent-blue transition-colors"
+              className="text-text-muted hover:text-accent-blue social-bounce"
               aria-label="GitHub"
             >
               <GithubIcon style={{ width: 18, height: 18 }} />
@@ -139,7 +162,7 @@ export default function MainLayout() {
               href="https://line.me"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-muted hover:text-accent-blue transition-colors"
+              className="text-text-muted hover:text-accent-blue social-bounce"
               aria-label="Line"
             >
               <MessageCircle size={18} />
@@ -148,7 +171,7 @@ export default function MainLayout() {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-muted hover:text-accent-blue transition-colors"
+              className="text-text-muted hover:text-accent-blue social-bounce"
               aria-label="Instagram"
             >
               <InstagramIcon style={{ width: 18, height: 18 }} />
@@ -157,7 +180,7 @@ export default function MainLayout() {
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-muted hover:text-accent-blue transition-colors"
+              className="text-text-muted hover:text-accent-blue social-bounce"
               aria-label="Facebook"
             >
               <FacebookIcon style={{ width: 18, height: 18 }} />

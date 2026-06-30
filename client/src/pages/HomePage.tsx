@@ -22,10 +22,10 @@ export default function HomePage() {
         />
 
         <div className="relative max-w-6xl mx-auto px-4 py-24 md:py-32 w-full">
-          {/* Greeting line */}
+          {/* Greeting line with typewriter cursor */}
           <div className="animate-fade-in-up flex items-center gap-3 mb-4">
             <Crosshair size={16} className="text-accent-blue" />
-            <span className="font-mono text-xs text-accent-blue tracking-[0.25em] uppercase">
+            <span className="font-mono text-xs text-accent-blue tracking-[0.25em] uppercase typewriter-cursor">
               {t('home.greeting')}
             </span>
           </div>
@@ -48,7 +48,7 @@ export default function HomePage() {
 
           {/* Designation plaque */}
           <div className="animate-fade-in-up-delay-2 inline-block mb-10">
-            <div className="bg-surface border border-hairline p-5 relative">
+            <div className="bg-surface border border-hairline p-5 relative hover:border-accent-blue/30 transition-colors duration-300">
               {/* Gold accent top line */}
               <div className="absolute top-0 left-0 w-16 h-[2px] bg-accent-gold" />
 
