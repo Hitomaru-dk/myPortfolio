@@ -6,6 +6,7 @@ import { GithubIcon } from '../components/BrandIcons';
 import axios from 'axios';
 import type { Project } from '../types';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import Spinner from '../components/Spinner';
 import Button from '../components/Button';
 import TechTag from '../components/TechTag';
 
@@ -33,8 +34,8 @@ export default function ProjectDetailPage() {
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto px-4 py-24 text-center">
-        <div className="inline-block w-8 h-8 border-2 border-accent-blue/30 border-t-accent-blue rounded-full animate-spin" />
+      <div className="max-w-6xl mx-auto px-4 text-center">
+        <Spinner />
       </div>
     );
   }

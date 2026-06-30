@@ -6,6 +6,7 @@ import axios from 'axios';
 import type { Project, ProjectFormData } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import Spinner from '../components/Spinner';
 import Button from '../components/Button';
 import TechTag from '../components/TechTag';
 import SectionHeading from '../components/SectionHeading';
@@ -136,8 +137,8 @@ export default function ProjectsPage() {
 
       {/* Loading state */}
       {loading && (
-        <div className="text-center py-20">
-          <div className="inline-block w-8 h-8 border-2 border-accent-blue/30 border-t-accent-blue rounded-full animate-spin" />
+        <div className="text-center">
+          <Spinner />
         </div>
       )}
 

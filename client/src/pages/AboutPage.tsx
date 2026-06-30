@@ -17,6 +17,7 @@ import SectionHeading from '../components/SectionHeading';
 import TechTag from '../components/TechTag';
 import Button from '../components/Button';
 import { GithubIcon, InstagramIcon, FacebookIcon } from '../components/BrandIcons';
+import Spinner from '../components/Spinner';
 import { useScrollReveal, useStaggerReveal } from '../hooks/useScrollReveal';
 import type { Profile, ProfileFormData } from '../types';
 
@@ -154,8 +155,8 @@ export default function AboutPage() {
 
   if (loading && !profile) {
     return (
-      <div className="max-w-6xl mx-auto px-4 py-24 text-center">
-        <div className="inline-block w-8 h-8 border-2 border-accent-blue/30 border-t-accent-blue rounded-full animate-spin" />
+      <div className="max-w-6xl mx-auto px-4 text-center">
+        <Spinner />
       </div>
     );
   }

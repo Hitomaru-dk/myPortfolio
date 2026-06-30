@@ -422,6 +422,129 @@ body {
 }
 
 
+/* ======================================================================
+   LOADING SPINNER — Premium animated spinner
+   ====================================================================== */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* Outer ring with glow pulse */
+.spinner-ring {
+  position: relative;
+  width: 48px;
+  height: 48px;
+}
+
+.spinner-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(59, 111, 255, 0.15);
+}
+
+.spinner-ring::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: radial-gradient(circle, rgba(59, 111, 255, 0.08) 0%, transparent 70%);
+  animation: spinnerPulse 2s ease-in-out infinite;
+}
+
+/* Spinning arc */
+.spinner-arc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: var(--color-accent-blue);
+  border-right-color: var(--color-accent-blue);
+  animation: spinnerRotate 0.8s linear infinite;
+}
+
+/* Orbiting dot */
+.spinner-dot {
+  position: absolute;
+  inset: 0;
+  animation: spinnerRotate 1.6s linear infinite reverse;
+}
+
+.spinner-dot::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-accent-gold);
+  box-shadow: 0 0 8px var(--color-accent-gold), 0 0 16px rgba(232, 178, 60, 0.3);
+}
+
+/* Inner crosshair */
+.spinner-crosshair {
+  position: absolute;
+  inset: 12px;
+  animation: spinnerRotate 3s linear infinite;
+}
+
+.spinner-crosshair::before,
+.spinner-crosshair::after {
+  content: "";
+  position: absolute;
+  background: var(--color-accent-blue);
+  opacity: 0.3;
+}
+
+.spinner-crosshair::before {
+  top: 50%;
+  left: 2px;
+  right: 2px;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.spinner-crosshair::after {
+  left: 50%;
+  top: 2px;
+  bottom: 2px;
+  width: 1px;
+  transform: translateX(-50%);
+}
+
+/* Loading text */
+.spinner-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  animation: spinnerTextBlink 1.5s ease-in-out infinite;
+}
+
+@keyframes spinnerRotate {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinnerPulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes spinnerTextBlink {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+
 /* ===== Reduced Motion ===== */
 @media (prefers-reduced-motion: reduce) {
   *,
