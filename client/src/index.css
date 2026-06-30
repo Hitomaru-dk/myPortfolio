@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+/* ===== Design Tokens ===== */
+@theme {
+  --color-bg: #0B0D10;
+  --color-surface: #14171C;
+  --color-accent-blue: #3B6FFF;
+  --color-accent-red: #D6303F;
+  --color-accent-gold: #E8B23C;
+  --color-text: #F2F3F5;
+  --color-text-muted: #8A93A1;
+  --color-hairline: rgba(138, 147, 161, 0.2);
+
+  --font-display: "Chakra Petch", sans-serif;
+  --font-body: "IBM Plex Sans Thai", "IBM Plex Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+/* ===== Base Resets ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Focus States ===== */
+:focus-visible {
+  outline: 2px solid var(--color-accent-blue);
+  outline-offset: 2px;
+}
+
+/* ===== Selection ===== */
+::selection {
+  background-color: var(--color-accent-blue);
+  color: var(--color-text);
+}
+
+/* ===== Scrollbar (subtle, matches theme) ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-text-muted);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-blue);
+}
+
+/* ===== Targeting Bracket Motif ===== */
+.target-bracket {
+  position: relative;
+}
+
+.target-bracket::before,
+.target-bracket::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+.target-bracket::before {
+  top: -4px;
+  left: -4px;
+  border-top: 2px solid var(--color-accent-blue);
+  border-left: 2px solid var(--color-accent-blue);
+  transform: translate(4px, 4px);
+}
+
+.target-bracket::after {
+  bottom: -4px;
+  right: -4px;
+  border-bottom: 2px solid var(--color-accent-blue);
+  border-right: 2px solid var(--color-accent-blue);
+  transform: translate(-4px, -4px);
+}
+
+.target-bracket:hover::before,
+.target-bracket:hover::after,
+.target-bracket:focus-visible::before,
+.target-bracket:focus-visible::after,
+.target-bracket.active::before,
+.target-bracket.active::after {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Gold variant */
+.target-bracket-gold::before {
+  border-color: var(--color-accent-gold);
+}
+.target-bracket-gold::after {
+  border-color: var(--color-accent-gold);
+}
+
+/* ===== All four corners (for cards, image frames) ===== */
+.target-bracket-full {
+  position: relative;
+}
+
+.target-bracket-full::before,
+.target-bracket-full::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Top-left + bottom-right via ::before/::after */
+.target-bracket-full::before {
+  top: -4px;
+  left: -4px;
+  width: 20px;
+  height: 20px;
+  border-top: 2px solid var(--color-accent-blue);
+  border-left: 2px solid var(--color-accent-blue);
+  transform: translate(4px, 4px);
+}
+
+.target-bracket-full::after {
+  bottom: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
+  border-bottom: 2px solid var(--color-accent-blue);
+  border-right: 2px solid var(--color-accent-blue);
+  transform: translate(-4px, -4px);
+}
+
+/* Additional corners via box-shadow on a child element or using outline trick */
+.target-bracket-full:hover::before,
+.target-bracket-full:hover::after,
+.target-bracket-full:focus-within::before,
+.target-bracket-full:focus-within::after {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* ===== Hairline Divider ===== */
+.hairline {
+  border: none;
+  border-top: 1px solid var(--color-hairline);
+  margin: 0;
+}
+
+/* ===== Hero Clip Path ===== */
+.hero-clip {
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+}
+
+@media (max-width: 640px) {
+  .hero-clip {
+    clip-path: polygon(0 0, 100% 0, 100% 94%, 0 100%);
+  }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== Fade-in Animation ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in-up-delay {
+  animation: fadeInUp 0.6s ease-out 0.15s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fadeInUp 0.6s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+/* ===== Scanline BG texture (hero only) ===== */
+.scanline-bg {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(59, 111, 255, 0.02) 2px,
+    rgba(59, 111, 255, 0.02) 4px
+  );
+}

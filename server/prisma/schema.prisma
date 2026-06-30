@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  techStack   String[]
+  imageUrl    String?
+  liveUrl     String?
+  repoUrl     String?
+  createdAt   DateTime @default(now())
+}
+
+model Profile {
+  id             String   @id @default("single-profile")
+  // ข้อมูลติดต่อ
+  email          String   @default("example@email.com")
+  phone          String   @default("+66 XX-XXX-XXXX")
+  birthdayTh     String   @default("1 มกราคม 2543")
+  birthdayEn     String   @default("1 January 2000")
+  avatarUrl      String? // เก็บภาพโปรไฟล์แบบ Base64 สำหรับอัปโหลดตรงจากเครื่อง
+  
+  // โซเชียล
+  githubUrl      String   @default("https://github.com")
+  lineUrl        String   @default("https://line.me")
+  instagramUrl   String   @default("https://instagram.com")
+  facebookUrl    String   @default("https://facebook.com")
+  
+  // ประวัติ
+  aboutTextTh    String   @default("ผมเป็น Frontend Developer ที่มีความหลงใหลในการสร้างเว็บไซต์และแอปพลิเคชันที่สวยงามและใช้งานง่าย มีประสบการณ์ในการพัฒนาเว็บด้วย React, TypeScript และเทคโนโลยีสมัยใหม่")
+  aboutTextEn    String   @default("I'm a Frontend Developer passionate about building beautiful, user-friendly websites and applications. Experienced with React, TypeScript, and modern web technologies.")
+  
+  // ทักษะ & เครื่องมือ
+  skills         String[] @default(["HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS", "Node.js", "Express", "REST API", "Git"])
+  tools          String[] @default(["VS Code", "Figma", "Adobe XD", "Photoshop", "Illustrator", "Postman", "GitHub", "Vercel"])
+  
+  // ภาษาใบรับรอง (เก็บโครงสร้าง JSON เพื่อง่ายต่อการปรับแต่งในฟอร์มเดียว)
+  certifications Json     @default("[]")
+}

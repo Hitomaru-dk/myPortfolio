@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "home": "Home",
+    "projects": "Projects",
+    "about": "About"
+  },
+  "home": {
+    "greeting": "Hi, I'm",
+    "name": "Nattakorn Tanngam",
+    "headline": "Frontend Developer",
+    "intro": "This portfolio showcases my work and experience. I specialize in Frontend Development, focused on crafting great user experiences and beautiful interfaces.",
+    "designation": "Target Roles",
+    "role1": "Frontend Developer",
+    "role2": "IT Support",
+    "cta": "View Projects"
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "My recent work",
+    "loadMore": "Load More",
+    "noProjects": "No projects yet",
+    "viewLive": "View Live",
+    "viewRepo": "View Repository",
+    "back": "Back",
+    "addProject": "Add Project",
+    "deleteConfirm": "Are you sure you want to delete this project?",
+    "form": {
+      "title": "Project Title",
+      "description": "Description",
+      "techStack": "Tech Stack (comma separated)",
+      "imageUrl": "Image URL",
+      "liveUrl": "Live URL",
+      "repoUrl": "Repository URL",
+      "submit": "Save",
+      "cancel": "Cancel"
+    }
+  },
+  "about": {
+    "title": "About",
+    "role": "Frontend Developer",
+    "aboutMe": "About Me",
+    "aboutText": "I'm a Frontend Developer passionate about building beautiful, user-friendly websites and applications. Experienced with React, TypeScript, and modern web technologies.",
+    "contact": "Contact Info",
+    "email": "Email",
+    "phone": "Phone",
+    "birthday": "Birthday",
+    "socials": "Socials",
+    "skills": "Technical Skills",
+    "tools": "Tools & Software",
+    "languages": "Languages",
+    "langThai": "Thai",
+    "langThaiLevel": "Native",
+    "langEnglish": "English",
+    "langEnglishLevel": "Intermediate",
+    "certifications": "Certifications"
+  },
+  "login": {
+    "title": "Login",
+    "password": "Password",
+    "submit": "Login",
+    "error": "Invalid password",
+    "logout": "Logout"
+  },
+  "footer": {
+    "copyright": "© 2025 Portfolio. All rights reserved."
+  }
+}

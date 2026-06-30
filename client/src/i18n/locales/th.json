@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "home": "หน้าแรก",
+    "projects": "ผลงาน",
+    "about": "เกี่ยวกับ"
+  },
+  "home": {
+    "greeting": "สวัสดี, ผมชื่อ",
+    "name": "ณัฐกรณ์ แท่นงาม",
+    "headline": "Frontend Developer",
+    "intro": "Portfolio นี้รวบรวมผลงานและประสบการณ์ของผม ที่ผ่านมาผมได้ทำงานด้าน Frontend Development โดยมุ่งเน้นสร้างประสบการณ์ผู้ใช้ที่ดีและ interface ที่สวยงาม",
+    "designation": "ตำแหน่งเป้าหมาย",
+    "role1": "Frontend Developer",
+    "role2": "IT Support",
+    "cta": "ดูผลงาน"
+  },
+  "projects": {
+    "title": "ผลงาน",
+    "subtitle": "โปรเจกต์ที่ผ่านมาของผม",
+    "loadMore": "โหลดเพิ่มเติม",
+    "noProjects": "ยังไม่มีโปรเจกต์",
+    "viewLive": "ดูเว็บไซต์",
+    "viewRepo": "ดู Repository",
+    "back": "กลับ",
+    "addProject": "เพิ่มโปรเจกต์",
+    "deleteConfirm": "คุณต้องการลบโปรเจกต์นี้หรือไม่?",
+    "form": {
+      "title": "ชื่อโปรเจกต์",
+      "description": "รายละเอียด",
+      "techStack": "เทคโนโลยี (คั่นด้วย ,)",
+      "imageUrl": "URL รูปภาพ",
+      "liveUrl": "URL เว็บไซต์",
+      "repoUrl": "URL Repository",
+      "submit": "บันทึก",
+      "cancel": "ยกเลิก"
+    }
+  },
+  "about": {
+    "title": "เกี่ยวกับ",
+    "role": "Frontend Developer",
+    "aboutMe": "เกี่ยวกับผม",
+    "aboutText": "ผมเป็น Frontend Developer ที่มีความหลงใหลในการสร้างเว็บไซต์และแอปพลิเคชันที่สวยงามและใช้งานง่าย มีประสบการณ์ในการพัฒนาเว็บด้วย React, TypeScript และเทคโนโลยีสมัยใหม่",
+    "contact": "ข้อมูลติดต่อ",
+    "email": "อีเมล",
+    "phone": "โทรศัพท์",
+    "birthday": "วันเกิด",
+    "socials": "โซเชียลมีเดีย",
+    "skills": "ทักษะทางเทคนิค",
+    "tools": "เครื่องมือและซอฟต์แวร์",
+    "languages": "ภาษา",
+    "langThai": "ภาษาไทย",
+    "langThaiLevel": "ภาษาแม่",
+    "langEnglish": "ภาษาอังกฤษ",
+    "langEnglishLevel": "ปานกลาง",
+    "certifications": "ใบรับรอง"
+  },
+  "login": {
+    "title": "เข้าสู่ระบบ",
+    "password": "รหัสผ่าน",
+    "submit": "เข้าสู่ระบบ",
+    "error": "รหัสผ่านไม่ถูกต้อง",
+    "logout": "ออกจากระบบ"
+  },
+  "footer": {
+    "copyright": "© 2025 Portfolio. สงวนลิขสิทธิ์ทั้งหมด"
+  }
+}
