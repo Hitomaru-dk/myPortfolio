@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Plus, Trash2, Upload } from 'lucide-react';
+import { Plus, Trash2, Upload, Edit2 } from 'lucide-react';
 import axios from 'axios';
 import type { Project, ProjectFormData } from '../types';
 import { useAuth } from '../contexts/AuthContext';
@@ -18,6 +18,7 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [showForm, setShowForm] = useState(false);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
 
   const fetchProjects = async () => {
     try {
@@ -61,6 +62,24 @@ export default function ProjectsPage() {
     }
   };
 
+  const handleEdit = async (data: ProjectFormData) => {
+    if (!editingProject) return;
+    try {
+      const payload = {
+        ...data,
+        techStack: data.techStack
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
+      };
+      const res = await axios.put(`/api/projects/${editingProject.id}`, payload, { withCredentials: true });
+      setProjects((prev) => prev.map((p) => (p.id === editingProject.id ? res.data : p)));
+      setEditingProject(null);
+    } catch {
+      console.error('Failed to update project');
+    }
+  };
+
   const visibleProjects = projects.slice(0, visibleCount);
   const hasMore = visibleCount < projects.length;
 
@@ -78,7 +97,10 @@ export default function ProjectsPage() {
 
         {/* Admin-only: Add button */}
         {isAdmin && (
-          <Button onClick={() => setShowForm(!showForm)}>
+          <Button onClick={() => {
+            setShowForm(!showForm);
+            setEditingProject(null);
+          }}>
             <Plus size={16} />
             {t('projects.addProject')}
           </Button>
@@ -87,10 +109,22 @@ export default function ProjectsPage() {
 
       {/* Admin-only: Add form */}
       {isAdmin && showForm && (
-        <AddProjectForm
+        <ProjectForm
           onSubmit={handleAdd}
           onCancel={() => setShowForm(false)}
           t={t}
+          title={t('projects.addProject')}
+        />
+      )}
+
+      {/* Admin-only: Edit form */}
+      {isAdmin && editingProject && (
+        <ProjectForm
+          initialData={editingProject}
+          onSubmit={handleEdit}
+          onCancel={() => setEditingProject(null)}
+          t={t}
+          title={t('projects.editProject') || 'แก้ไขโปรเจกต์'}
         />
       )}
 
@@ -117,6 +151,10 @@ export default function ProjectsPage() {
                 key={project.id}
                 project={project}
                 isAdmin={isAdmin}
+                onEdit={(p) => {
+                  setEditingProject(p);
+                  setShowForm(false);
+                }}
                 onDelete={handleDelete}
                 index={i}
               />
@@ -144,11 +182,13 @@ export default function ProjectsPage() {
 function ProjectCard({
   project,
   isAdmin,
+  onEdit,
   onDelete,
   index,
 }: {
   project: Project;
   isAdmin: boolean;
+  onEdit: (project: Project) => void;
   onDelete: (id: string) => void;
   index: number;
 }) {
@@ -187,15 +227,24 @@ function ProjectCard({
             {project.title}
           </Link>
 
-          {/* Admin-only: Delete button */}
+          {/* Admin-only: Action buttons */}
           {isAdmin && (
-            <button
-              onClick={() => onDelete(project.id)}
-              className="shrink-0 text-text-muted/40 hover:text-accent-red transition-colors cursor-pointer p-1"
-              aria-label="Delete project"
-            >
-              <Trash2 size={14} />
-            </button>
+            <div className="shrink-0 flex items-center gap-1.5">
+              <button
+                onClick={() => onEdit(project)}
+                className="text-text-muted/40 hover:text-accent-blue transition-colors cursor-pointer p-1"
+                aria-label="Edit project"
+              >
+                <Edit2 size={14} />
+              </button>
+              <button
+                onClick={() => onDelete(project.id)}
+                className="text-text-muted/40 hover:text-accent-red transition-colors cursor-pointer p-1"
+                aria-label="Delete project"
+              >
+                <Trash2 size={14} />
+              </button>
+            </div>
           )}
         </div>
 
@@ -215,23 +264,27 @@ function ProjectCard({
   );
 }
 
-/* ===== Add Project Form ===== */
-function AddProjectForm({
+/* ===== Project Form ===== */
+function ProjectForm({
   onSubmit,
   onCancel,
   t,
+  title,
+  initialData,
 }: {
   onSubmit: (data: ProjectFormData) => void;
   onCancel: () => void;
   t: (key: string) => string;
+  title: string;
+  initialData?: Project;
 }) {
   const [form, setForm] = useState<ProjectFormData>({
-    title: '',
-    description: '',
-    techStack: '',
-    imageUrl: '',
-    liveUrl: '',
-    repoUrl: '',
+    title: initialData?.title || '',
+    description: initialData?.description || '',
+    techStack: initialData?.techStack.join(', ') || '',
+    imageUrl: initialData?.imageUrl || '',
+    liveUrl: initialData?.liveUrl || '',
+    repoUrl: initialData?.repoUrl || '',
   });
 
   const handleChange = (
@@ -271,7 +324,7 @@ function AddProjectForm({
       onSubmit={handleSubmit}
       className="bg-surface border border-hairline p-6 mb-10 animate-fade-in-up space-y-4"
     >
-      <SectionHeading title={t('projects.addProject')} />
+      <SectionHeading title={title} />
 
       {/* อัปโหลดรูปภาพโปรเจกต์ */}
       <div className="flex flex-col sm:flex-row gap-5 items-center bg-bg/50 p-4 border border-hairline">

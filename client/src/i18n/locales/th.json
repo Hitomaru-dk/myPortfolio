@@ -23,6 +23,7 @@
     "viewRepo": "ดู Repository",
     "back": "กลับ",
     "addProject": "เพิ่มโปรเจกต์",
+    "editProject": "แก้ไขโปรเจกต์",
     "deleteConfirm": "คุณต้องการลบโปรเจกต์นี้หรือไม่?",
     "form": {
       "title": "ชื่อโปรเจกต์",

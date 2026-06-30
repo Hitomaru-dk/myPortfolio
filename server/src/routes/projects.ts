@@ -89,4 +89,43 @@ router.delete('/:id', requireAdmin, async (req: AdminRequest, res: Response): Pr
   }
 });
 
+// PUT /api/projects/:id — admin only, update project
+router.put('/:id', requireAdmin, async (req: AdminRequest, res: Response): Promise<void> => {
+  try {
+    const id = req.params.id as string;
+    const { title, description, techStack, imageUrl, liveUrl, repoUrl } = req.body;
+
+    if (!title || !description) {
+      res.status(400).json({ error: 'Title and description are required' });
+      return;
+    }
+
+    const projectExists = await prisma.project.findUnique({
+      where: { id },
+    });
+
+    if (!projectExists) {
+      res.status(404).json({ error: 'Project not found' });
+      return;
+    }
+
+    const updatedProject = await prisma.project.update({
+      where: { id },
+      data: {
+        title,
+        description,
+        techStack: Array.isArray(techStack) ? techStack : [],
+        imageUrl: imageUrl || null,
+        liveUrl: liveUrl || null,
+        repoUrl: repoUrl || null,
+      },
+    });
+
+    res.json(updatedProject);
+  } catch (err) {
+    console.error('Failed to update project:', err);
+    res.status(500).json({ error: 'Failed to update project' });
+  }
+});
+
 export default router;
