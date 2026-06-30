@@ -136,9 +136,7 @@ export default function MainLayout() {
 
       {/* ===== Main content ===== */}
       <main className="flex-1">
-        <div className="page-enter" key={location.pathname}>
-          <Outlet />
-        </div>
+        <Outlet />
       </main>
 
       {/* ===== Footer ===== */}
