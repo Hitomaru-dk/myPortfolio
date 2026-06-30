@@ -153,15 +153,8 @@ export default function AboutPage() {
     }
   };
 
-  if (loading && !profile) {
-    return (
-      <div className="max-w-6xl mx-auto px-4 text-center">
-        <Spinner />
-      </div>
-    );
-  }
-
   // ป้องกันกรณีเกิดข้อผิดพลาดในการโหลดข้อมูล
+  // (ต้องอยู่ก่อน hooks เพราะ hooks ห้ามอยู่หลัง conditional return)
   const activeProfile = profile || {
     email: 'example@email.com',
     phone: '+66 XX-XXX-XXXX',
@@ -180,9 +173,18 @@ export default function AboutPage() {
   };
 
   // Stagger reveals for skills, tools, and certs
+  // (hooks ต้องถูกเรียกทุก render — ห้ามอยู่หลัง conditional return)
   const skillsStagger = useStaggerReveal(activeProfile.skills.length, 50);
   const toolsStagger = useStaggerReveal(activeProfile.tools.length, 50);
   const certsStagger = useStaggerReveal(activeProfile.certifications.length, 80);
+
+  if (loading && !profile) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 text-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-16 md:py-24">
