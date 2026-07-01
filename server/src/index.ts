@@ -8,12 +8,36 @@ import profileRoutes from './routes/profile.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const FRONTEND_URL = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/+$/, '');
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
+  .split(',')
+  .map(url => url.trim().replace(/\/+$/, ''));
+
+// โดเมนที่อนุญาตตามค่าเริ่มต้น (สำหรับการรันโลคอลและ Github Pages ของผู้ใช้)
+const defaultAllowed = [
+  'http://localhost:5173',
+  'https://hydra07188.github.io'
+];
 
 // Middleware
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: (origin, callback) => {
+      // อนุญาตหากไม่มี origin (เช่น หลังบ้านเรียกกันเอง หรือเครื่องมือทดสอบอื่นๆ)
+      if (!origin) {
+        return callback(null, true);
+      }
+      
+      const cleanOrigin = origin.replace(/\/+$/, '');
+      const isAllowed = 
+        allowedOrigins.includes(cleanOrigin) || 
+        defaultAllowed.some(allowed => cleanOrigin.startsWith(allowed));
+        
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     credentials: true,
   })
 );
