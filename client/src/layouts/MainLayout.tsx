@@ -1,15 +1,15 @@
-import { Outlet, NavLink, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X, MessageCircle } from 'lucide-react';
 import { GithubIcon, InstagramIcon, FacebookIcon } from '../components/BrandIcons';
 import LangToggle from '../components/LangToggle';
 import { useAuth } from '../contexts/AuthContext';
 
 const navLinks = [
-  { key: 'home', path: '/' },
-  { key: 'projects', path: '/projects' },
-  { key: 'about', path: '/about' },
+  { key: 'home', hash: '#home' },
+  { key: 'projects', hash: '#projects' },
+  { key: 'about', hash: '#about' },
 ] as const;
 
 export default function MainLayout() {
@@ -17,6 +17,54 @@ export default function MainLayout() {
   const { isAdmin, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const [activeSection, setActiveSection] = useState<string>('home');
+
+  // ระบบตรวจจับ Scroll Spy
+  useEffect(() => {
+    if (location.pathname !== '/') return;
+
+    const handleScroll = () => {
+      // เช็คการเลื่อนลงไปจุดล่างสุดของเว็บ
+      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20;
+      if (isAtBottom) {
+        setActiveSection('about');
+        return;
+      }
+
+      const scrollPosition = window.scrollY + 160; // offset ค่าชดเชยหัวข้อ
+      const sections = ['home', 'projects', 'about'];
+
+      for (const sectionId of sections) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const top = element.offsetTop;
+          const height = element.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // รันครั้งแรกทันที
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location.pathname]);
+
+  // ฟังก์ชันเลื่อนหน้าจอไปยังส่วนต่างๆ แบบนุ่มนวล
+  const handleNavClick = (hash: string) => {
+    setMobileOpen(false);
+    if (location.pathname !== '/') {
+      // ถ้าไม่ได้อยู่หน้าแรก ให้ส่งกลับไปหน้าแรกพร้อมกับแฮช (hash)
+      window.location.href = '/' + hash;
+      return;
+    }
+    const element = document.querySelector(hash);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -24,29 +72,29 @@ export default function MainLayout() {
       <header className="sticky top-0 z-50 bg-bg/80 backdrop-blur-md border-b border-hairline">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           {/* Logo / site name */}
-          <NavLink
-            to="/"
-            className="font-display font-bold text-lg tracking-widest text-text hover:text-accent-blue transition-colors uppercase"
+          <button
+            onClick={() => handleNavClick('#home')}
+            className="font-display font-bold text-lg tracking-widest text-text hover:text-accent-blue transition-colors uppercase cursor-pointer"
           >
             PORT<span className="text-accent-gold">FOLIO</span>
-          </NavLink>
+          </button>
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
             {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
+              const isActive = location.pathname === '/' && activeSection === link.key;
               return (
-                <NavLink
+                <button
                   key={link.key}
-                  to={link.path}
-                  className={`target-bracket relative font-display text-sm tracking-wider uppercase px-4 py-2 transition-colors duration-200 ${
+                  onClick={() => handleNavClick(link.hash)}
+                  className={`target-bracket relative font-display text-sm tracking-wider uppercase px-4 py-2 transition-colors duration-200 cursor-pointer ${
                     isActive
                       ? 'text-accent-blue active'
                       : 'text-text-muted hover:text-text'
                   }`}
                 >
                   {t(`nav.${link.key}`)}
-                </NavLink>
+                </button>
               );
             })}
           </nav>
@@ -98,13 +146,12 @@ export default function MainLayout() {
         >
           <div className="px-4 py-4 flex flex-col gap-1">
             {navLinks.map((link, i) => {
-              const isActive = location.pathname === link.path;
+              const isActive = location.pathname === '/' && activeSection === link.key;
               return (
-                <NavLink
+                <button
                   key={link.key}
-                  to={link.path}
-                  onClick={() => setMobileOpen(false)}
-                  className={`font-display text-sm tracking-wider uppercase px-3 py-2.5 transition-all duration-300 ${
+                  onClick={() => handleNavClick(link.hash)}
+                  className={`text-left font-display text-sm tracking-wider uppercase px-3 py-2.5 transition-all duration-300 cursor-pointer ${
                     isActive ? 'text-accent-blue' : 'text-text-muted hover:text-text'
                   }`}
                   style={{
@@ -115,7 +162,7 @@ export default function MainLayout() {
                   tabIndex={mobileOpen ? 0 : -1}
                 >
                   {t(`nav.${link.key}`)}
-                </NavLink>
+                </button>
               );
             })}
             {isAdmin && (
