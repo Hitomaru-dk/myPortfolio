@@ -3,14 +3,20 @@ import { initReactI18next } from 'react-i18next';
 import th from './locales/th.json';
 import en from './locales/en.json';
 
-const savedLang = localStorage.getItem('lang') || 'th';
+function getSavedLang(): string {
+  try {
+    return localStorage.getItem('lang') || 'th';
+  } catch {
+    return 'th';
+  }
+}
 
 i18n.use(initReactI18next).init({
   resources: {
     th: { translation: th },
     en: { translation: en },
   },
-  lng: savedLang,
+  lng: getSavedLang(),
   fallbackLng: 'th',
   interpolation: {
     escapeValue: false,
@@ -18,7 +24,10 @@ i18n.use(initReactI18next).init({
 });
 
 i18n.on('languageChanged', (lng) => {
-  localStorage.setItem('lang', lng);
+  try {
+    localStorage.setItem('lang', lng);
+  } catch {
+  }
   document.documentElement.lang = lng;
 });
 
