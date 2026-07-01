@@ -12,7 +12,21 @@
     "designation": "ตำแหน่งเป้าหมาย",
     "role1": "Frontend Developer",
     "role2": "IT Support",
-    "cta": "ดูผลงาน"
+    "cta": "ดูผลงาน",
+    "terminal": {
+      "title": "RX-93_SYSTEM_MONITOR // COCKPIT_HUD",
+      "status": "SYS_STATUS: ONLINE",
+      "btnPing": "PING API หลังบ้าน",
+      "btnSkills": "เรียกดูทักษะหลัก",
+      "btnClear": "ล้างหน้าจอ",
+      "pinging": "กำลังส่งสัญญาณ PING ไปยัง API เซิร์ฟเวอร์...",
+      "pingSuccess": "เชื่อมต่อสำเร็จ! ล่าช้า: {{ms}}ms (สถานะ: {{status}})",
+      "pingError": "การเชื่อมต่อล้มเหลว: เซิร์ฟเวอร์ไม่ตอบสนอง",
+      "skillsTitle": "=== รายการทักษะหลักที่สแกนพบ ===",
+      "welcomeMsg1": "เข้าสู่ระบบความปลอดภัยในฐานะผู้มาเยือน GUEST@NATTAR-MOBILE",
+      "welcomeMsg2": "ระบบ RX-93 Nu Gundam OS พร้อมทำงาน",
+      "welcomeMsg3": "คลิกปุ่มด้านล่างเพื่อสั่งงานโมดูลตรวจวินิจฉัย..."
+    }
   },
   "projects": {
     "title": "ผลงาน",

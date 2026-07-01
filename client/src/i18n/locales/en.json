@@ -12,7 +12,21 @@
     "designation": "Target Roles",
     "role1": "Frontend Developer",
     "role2": "IT Support",
-    "cta": "View Projects"
+    "cta": "View Projects",
+    "terminal": {
+      "title": "RX-93_SYSTEM_MONITOR // COCKPIT_HUD",
+      "status": "SYS_STATUS: ONLINE",
+      "btnPing": "PING BACKEND API",
+      "btnSkills": "CORE TECH STACK",
+      "btnClear": "CLEAR CONSOLE",
+      "pinging": "Broadcasting PING signal to API server...",
+      "pingSuccess": "Uplink secured! Latency: {{ms}}ms (Status: {{status}})",
+      "pingError": "Uplink failed: Target host unreachable",
+      "skillsTitle": "=== SCANNING CORE SKILLS AND TECH ===",
+      "welcomeMsg1": "Security authorization granted: GUEST@NATTAR-MOBILE",
+      "welcomeMsg2": "RX-93 Nu Gundam OS initialized.",
+      "welcomeMsg3": "Click HUD actions below to trigger diagnostics module..."
+    }
   },
   "projects": {
     "title": "Projects",
