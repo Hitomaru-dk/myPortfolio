@@ -26,9 +26,13 @@ router.get('/', async (_req: Request, res: Response): Promise<void> => {
     }
 
     res.json(profile);
-  } catch (err) {
+  } catch (err: any) {
     console.error('Failed to fetch profile:', err);
-    res.status(500).json({ error: 'Failed to fetch profile' });
+    res.status(500).json({ 
+      error: 'Failed to fetch profile',
+      message: err.message || String(err),
+      stack: err.stack
+    });
   }
 });
 
