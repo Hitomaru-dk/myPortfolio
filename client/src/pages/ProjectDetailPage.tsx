@@ -106,7 +106,7 @@ export default function ProjectDetailPage() {
         ref={techRef}
         className={`flex flex-wrap gap-2 mb-8 reveal ${techVisible ? 'visible' : ''}`}
       >
-        {project.techStack.map((tech) => (
+        {(project.techStack || []).map((tech) => (
           <TechTag key={tech} label={tech} />
         ))}
       </div>

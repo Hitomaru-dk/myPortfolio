@@ -28,9 +28,14 @@ app.use(
       }
       
       const cleanOrigin = origin.replace(/\/+$/, '');
+      
+      // ตรวจสอบว่าเป็น IP ภายในวงแลน/โลคอลเน็ตเวิร์ก (เช่น 192.168.x.x, 10.x.x.x, 172.16.x.x-172.31.x.x, localhost)
+      const isLocalIP = /^https?:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)(:\d+)?$/.test(cleanOrigin);
+      
       const isAllowed = 
         allowedOrigins.includes(cleanOrigin) || 
-        defaultAllowed.some(allowed => cleanOrigin.startsWith(allowed));
+        defaultAllowed.some(allowed => cleanOrigin.startsWith(allowed)) ||
+        isLocalIP;
         
       if (isAllowed) {
         callback(null, true);

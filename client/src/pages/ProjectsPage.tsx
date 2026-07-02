@@ -261,12 +261,12 @@ function ProjectCard({
 
         {/* Tech tags */}
         <div className="flex flex-wrap gap-1.5 mt-3">
-          {project.techStack.slice(0, 3).map((tech) => (
+          {(project.techStack || []).slice(0, 3).map((tech) => (
             <TechTag key={tech} label={tech} />
           ))}
-          {project.techStack.length > 3 && (
+          {(project.techStack || []).length > 3 && (
             <span className="font-mono text-xs text-text-muted self-center">
-              +{project.techStack.length - 3}
+              +{(project.techStack || []).length - 3}
             </span>
           )}
         </div>
@@ -292,7 +292,7 @@ function ProjectForm({
   const [form, setForm] = useState<ProjectFormData>({
     title: initialData?.title || '',
     description: initialData?.description || '',
-    techStack: initialData?.techStack.join(', ') || '',
+    techStack: Array.isArray(initialData?.techStack) ? initialData.techStack.join(', ') : '',
     imageUrl: initialData?.imageUrl || '',
     liveUrl: initialData?.liveUrl || '',
     repoUrl: initialData?.repoUrl || '',

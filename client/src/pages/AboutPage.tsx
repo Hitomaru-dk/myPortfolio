@@ -63,20 +63,20 @@ export default function AboutPage() {
       setProfile(res.data);
       // เตรียมข้อมูลลงฟอร์ม
       setFormData({
-        email: res.data.email,
-        phone: res.data.phone,
-        birthdayTh: res.data.birthdayTh,
-        birthdayEn: res.data.birthdayEn,
+        email: res.data.email || '',
+        phone: res.data.phone || '',
+        birthdayTh: res.data.birthdayTh || '',
+        birthdayEn: res.data.birthdayEn || '',
         avatarUrl: res.data.avatarUrl || '',
-        githubUrl: res.data.githubUrl,
-        lineUrl: res.data.lineUrl,
-        instagramUrl: res.data.instagramUrl,
-        facebookUrl: res.data.facebookUrl,
-        aboutTextTh: res.data.aboutTextTh,
-        aboutTextEn: res.data.aboutTextEn,
-        skills: res.data.skills.join(', '),
-        tools: res.data.tools.join(', '),
-        certifications: JSON.stringify(res.data.certifications, null, 2),
+        githubUrl: res.data.githubUrl || '',
+        lineUrl: res.data.lineUrl || '',
+        instagramUrl: res.data.instagramUrl || '',
+        facebookUrl: res.data.facebookUrl || '',
+        aboutTextTh: res.data.aboutTextTh || '',
+        aboutTextEn: res.data.aboutTextEn || '',
+        skills: Array.isArray(res.data.skills) ? res.data.skills.join(', ') : '',
+        tools: Array.isArray(res.data.tools) ? res.data.tools.join(', ') : '',
+        certifications: res.data.certifications ? JSON.stringify(res.data.certifications, null, 2) : '[]',
       });
     } catch (err) {
       console.error('Failed to fetch profile:', err);
@@ -172,11 +172,16 @@ export default function AboutPage() {
     certifications: [],
   };
 
+  // ประกันความปลอดภัยกรณีข้อมูลอาเรย์เป็นค่าว่างหรือไม่ได้กำหนดไว้
+  const skillsArray = Array.isArray(activeProfile.skills) ? activeProfile.skills : [];
+  const toolsArray = Array.isArray(activeProfile.tools) ? activeProfile.tools : [];
+  const certsArray = Array.isArray(activeProfile.certifications) ? activeProfile.certifications : [];
+
   // Stagger reveals for skills, tools, and certs
   // (hooks ต้องถูกเรียกทุก render — ห้ามอยู่หลัง conditional return)
-  const skillsStagger = useStaggerReveal(activeProfile.skills.length, 50);
-  const toolsStagger = useStaggerReveal(activeProfile.tools.length, 50);
-  const certsStagger = useStaggerReveal(activeProfile.certifications.length, 80);
+  const skillsStagger = useStaggerReveal(skillsArray.length, 50);
+  const toolsStagger = useStaggerReveal(toolsArray.length, 50);
+  const certsStagger = useStaggerReveal(certsArray.length, 80);
 
   if (loading && !profile) {
     return (
@@ -399,7 +404,7 @@ export default function AboutPage() {
             <section ref={skillsRef} className={`reveal ${skillsVisible ? 'visible' : ''}`}>
               <SectionHeading title={t('about.skills')} />
               <div ref={skillsStagger.containerRef} className="flex flex-wrap gap-2">
-                {activeProfile.skills.map((skill, i) => (
+                {skillsArray.map((skill, i) => (
                   <span
                     key={skill}
                     className={`reveal-item ${skillsStagger.visibleItems[i] ? 'visible' : ''}`}
@@ -414,7 +419,7 @@ export default function AboutPage() {
             <section ref={toolsRef} className={`reveal ${toolsVisible ? 'visible' : ''}`}>
               <SectionHeading title={t('about.tools')} />
               <div ref={toolsStagger.containerRef} className="flex flex-wrap gap-2">
-                {activeProfile.tools.map((tool, i) => (
+                {toolsArray.map((tool, i) => (
                   <span
                     key={tool}
                     className={`reveal-item ${toolsStagger.visibleItems[i] ? 'visible' : ''}`}
@@ -438,7 +443,7 @@ export default function AboutPage() {
             <section ref={certsRef} className={`reveal ${certsVisible ? 'visible' : ''}`}>
               <SectionHeading title={t('about.certifications')} />
               <div ref={certsStagger.containerRef} className="space-y-3">
-                {activeProfile.certifications.map((cert, i) => (
+                {certsArray.map((cert: any, i) => (
                   <div
                     key={cert.name}
                     className={`bg-surface border border-hairline p-4 flex items-start justify-between cert-card reveal-item ${
